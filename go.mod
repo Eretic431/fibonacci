@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/cockroachdb/cmux v0.0.0-20170110192607-30d10be49292
+	github.com/go-chi/chi/v5 v5.0.7
 	go.uber.org/zap v1.20.0
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.25.0
