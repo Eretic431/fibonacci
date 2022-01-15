@@ -1,9 +1,15 @@
 package usecase
 
+import "github.com/Eretic431/fibonacci/internal/models"
+
 type FibonacciUseCase struct {
 }
 
-func (f *FibonacciUseCase) GetSlice(from, to int) []int64 {
+func (f *FibonacciUseCase) GetSlice(from, to int) ([]int64, error) {
+	if from < 1 || to < from {
+		return nil, models.ErrInvalidArguments
+	}
+
 	result := make([]int64, 0, to-from+1)
 	var prev1, prev2 int64 = 0, 1
 
@@ -21,5 +27,5 @@ func (f *FibonacciUseCase) GetSlice(from, to int) []int64 {
 		}
 	}
 
-	return result
+	return result, nil
 }

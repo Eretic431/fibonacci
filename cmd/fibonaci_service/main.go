@@ -7,5 +7,10 @@ import (
 
 func main() {
 	uc := &usecase.FibonacciUseCase{}
-	fmt.Println(uc.GetSlice(1, 10))
+	f, err := uc.GetSlice(1, 0)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(f)
 }
