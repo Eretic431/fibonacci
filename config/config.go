@@ -3,7 +3,7 @@ package config
 import "github.com/caarlos0/env"
 
 type Config struct {
-	ServerCfg ServerConfig
+	ServerCfg *ServerConfig
 }
 
 type ServerConfig struct {
@@ -12,10 +12,10 @@ type ServerConfig struct {
 }
 
 func GetConfig() (*Config, error) {
-	c := &Config{}
-	if err := env.Parse(c); err != nil {
+	sCfg := &ServerConfig{}
+	if err := env.Parse(sCfg); err != nil {
 		return nil, err
 	}
 
-	return c, nil
+	return &Config{ServerCfg: sCfg}, nil
 }
