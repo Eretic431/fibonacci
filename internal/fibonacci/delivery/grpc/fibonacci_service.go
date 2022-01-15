@@ -12,8 +12,12 @@ import (
 )
 
 type FibonacciService struct {
-	fibonacciUC usecase.FibonacciUseCase
+	fibonacciUC *usecase.FibonacciUseCase
 	log         *zap.SugaredLogger
+}
+
+func NewGrpcFibonacciService(fuc *usecase.FibonacciUseCase, log *zap.SugaredLogger) *FibonacciService {
+	return &FibonacciService{fibonacciUC: fuc, log: log}
 }
 
 func (fs *FibonacciService) Get(ctx context.Context, r *fibonacciService.GetRequest) (*fibonacciService.GetResponse, error) {
@@ -34,6 +38,7 @@ func (fs *FibonacciService) Get(ctx context.Context, r *fibonacciService.GetRequ
 func (fs *FibonacciService) Serve(l net.Listener) {
 	s := grpc.NewServer()
 	fibonacciService.RegisterFibonacciServiceServer(s, fs)
+	fs.log.Infof("Starting grpc service")
 	if err := s.Serve(l); err != nil {
 		fs.log.Errorw("error serving grpc", "error", err)
 	}

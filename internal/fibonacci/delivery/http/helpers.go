@@ -12,7 +12,7 @@ func (fs *FibonacciService) writeJSON(w http.ResponseWriter, status int, data in
 	}
 	js = append(js, '\n')
 
-	w.Header().Set("Content-Type", "application/js")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	_, err = w.Write(js)
 
