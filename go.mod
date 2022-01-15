@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/cockroachdb/cmux v0.0.0-20170110192607-30d10be49292 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
