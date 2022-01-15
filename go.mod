@@ -3,8 +3,10 @@ module github.com/Eretic431/fibonacci
 go 1.17
 
 require (
+	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/cockroachdb/cmux v0.0.0-20170110192607-30d10be49292
 	github.com/go-chi/chi/v5 v5.0.7
+	github.com/google/wire v0.5.0
 	go.uber.org/zap v1.20.0
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.25.0
