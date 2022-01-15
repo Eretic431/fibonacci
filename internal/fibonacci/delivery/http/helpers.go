@@ -36,7 +36,7 @@ func (fs *FibonacciService) serverErrorResponse(w http.ResponseWriter, r *http.R
 }
 
 func (fs *FibonacciService) clientErrorResponse(w http.ResponseWriter, r *http.Request, status int, message interface{}) {
-	fs.log.Debugw("client error", "err", message)
+	fs.log.Debugw("client error", "error", message)
 	fs.errorResponse(w, r, status, message)
 }
 
