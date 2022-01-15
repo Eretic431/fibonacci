@@ -5,6 +5,10 @@ import "github.com/Eretic431/fibonacci/internal/models"
 type FibonacciUseCase struct {
 }
 
+func NewFibonacciUseCase() *FibonacciUseCase {
+	return &FibonacciUseCase{}
+}
+
 func (f *FibonacciUseCase) GetSlice(from, to int) ([]int64, error) {
 	if from < 1 || to < from {
 		return nil, models.ErrInvalidArguments
