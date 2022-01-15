@@ -7,6 +7,8 @@ import (
 	"github.com/Eretic431/fibonacci/internal/fibonacci/usecase"
 	"github.com/Eretic431/fibonacci/internal/models"
 	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"net"
 )
 
 type FibonacciService struct {
@@ -27,4 +29,12 @@ func (fs *FibonacciService) Get(ctx context.Context, r *fibonacciService.GetRequ
 	}
 
 	return &fibonacciService.GetResponse{Numbers: numbers}, nil
+}
+
+func (fs *FibonacciService) Serve(l net.Listener) {
+	s := grpc.NewServer()
+	fibonacciService.RegisterFibonacciServiceServer(s, fs)
+	if err := s.Serve(l); err != nil {
+		fs.log.Errorw("error serving grpc", "error", err)
+	}
 }
