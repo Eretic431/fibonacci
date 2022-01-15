@@ -55,6 +55,7 @@ func (fs *FibonacciService) GetHandler(w http.ResponseWriter, r *http.Request) {
 
 func (fs *FibonacciService) Serve(l net.Listener) {
 	server := &http.Server{Handler: fs.router()}
+	fs.log.Infof("Starting http service")
 	if err := server.Serve(l); err != nil {
 		fs.log.Errorw("error serving http", "error", err)
 		return
