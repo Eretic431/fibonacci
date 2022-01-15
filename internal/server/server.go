@@ -23,6 +23,11 @@ func (s *Server) Run() {
 	}
 
 	m := cmux.New(l)
+	grpcL := m.Match(cmux.HTTP2()) // consider all http2 traffic is grpc requests
+	httpL := m.Match(cmux.HTTP1())
+
+	go s.grpcService.Serve(grpcL)
+	go s.httpService.Serve(httpL)
 
 	if err := m.Serve(); err != nil {
 		s.log.Errorw("serving error", "error", err)
