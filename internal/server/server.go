@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/Eretic431/fibonacci/config"
 	grpcS "github.com/Eretic431/fibonacci/internal/fibonacci/delivery/grpc"
 	httpS "github.com/Eretic431/fibonacci/internal/fibonacci/delivery/http"
 	"github.com/cockroachdb/cmux"
@@ -9,16 +10,16 @@ import (
 )
 
 type Server struct {
-	log         *zap.SugaredLogger
-	grpcService *grpcS.FibonacciService
-	httpService *httpS.FibonacciService
+	Log         *zap.SugaredLogger
+	Cfg         *config.Config
+	GrpcService *grpcS.FibonacciService
+	HttpService *httpS.FibonacciService
 }
 
 func (s *Server) Run() {
-	// TODO: get port from config
-	l, err := net.Listen("tcp", ":8080")
+	l, err := net.Listen("tcp", s.Cfg.ServerCfg.Port)
 	if err != nil {
-		s.log.Errorw("could not listen", "error", err)
+		s.Log.Errorw("could not listen", "error", err)
 		return
 	}
 
@@ -26,11 +27,11 @@ func (s *Server) Run() {
 	grpcL := m.Match(cmux.HTTP2()) // consider all http2 traffic is grpc requests
 	httpL := m.Match(cmux.HTTP1())
 
-	go s.grpcService.Serve(grpcL)
-	go s.httpService.Serve(httpL)
+	go s.GrpcService.Serve(grpcL)
+	go s.HttpService.Serve(httpL)
 
 	if err := m.Serve(); err != nil {
-		s.log.Errorw("serving error", "error", err)
+		s.Log.Errorw("serving error", "error", err)
 		return
 	}
 }
