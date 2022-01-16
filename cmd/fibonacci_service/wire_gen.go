@@ -11,6 +11,8 @@ import (
 	"github.com/Eretic431/fibonacci/internal/fibonacci/delivery/http"
 	"github.com/Eretic431/fibonacci/internal/fibonacci/usecase"
 	"github.com/Eretic431/fibonacci/internal/server"
+	"github.com/Eretic431/fibonacci/pkg/logger"
+	"github.com/Eretic431/fibonacci/pkg/utils"
 )
 
 // Injectors from wire.go:
@@ -20,13 +22,14 @@ func initServer() (*server.Server, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	sugaredLogger, cleanup, err := newLogger(configConfig)
+	sugaredLogger, cleanup, err := logger.NewLogger(configConfig)
 	if err != nil {
 		return nil, nil, err
 	}
 	fibonacciUseCase := usecase.NewFibonacciUseCase()
 	fibonacciService := grpc.NewGrpcFibonacciService(fibonacciUseCase, sugaredLogger)
-	httpFibonacciService := http.NewGrpcFibonacciService(fibonacciUseCase, sugaredLogger)
+	httpHelper := utils.NewHttpHelper(sugaredLogger)
+	httpFibonacciService := http.NewGrpcFibonacciService(fibonacciUseCase, sugaredLogger, httpHelper)
 	serverServer := &server.Server{
 		Log:         sugaredLogger,
 		Cfg:         configConfig,

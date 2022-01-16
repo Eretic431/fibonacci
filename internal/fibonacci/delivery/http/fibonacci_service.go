@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/Eretic431/fibonacci/internal/fibonacci/usecase"
 	"github.com/Eretic431/fibonacci/internal/models"
+	"github.com/Eretic431/fibonacci/pkg/utils"
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 	"net"
@@ -14,32 +15,33 @@ import (
 type FibonacciService struct {
 	fibonacciUC *usecase.FibonacciUseCase
 	log         *zap.SugaredLogger
+	httpH       *utils.HttpHelper
 }
 
-func NewGrpcFibonacciService(fuc *usecase.FibonacciUseCase, log *zap.SugaredLogger) *FibonacciService {
-	return &FibonacciService{fibonacciUC: fuc, log: log}
+func NewGrpcFibonacciService(fuc *usecase.FibonacciUseCase, log *zap.SugaredLogger, httpH *utils.HttpHelper) *FibonacciService {
+	return &FibonacciService{fibonacciUC: fuc, log: log, httpH: httpH}
 }
 
 func (fs *FibonacciService) GetHandler(w http.ResponseWriter, r *http.Request) {
 	from, err := strconv.Atoi(r.URL.Query().Get("x"))
 	if err != nil {
-		fs.badRequestResponse(w, r, err)
+		fs.httpH.BadRequestResponse(w, r, err)
 		return
 	}
 
 	to, err := strconv.Atoi(r.URL.Query().Get("y"))
 	if err != nil {
-		fs.badRequestResponse(w, r, err)
+		fs.httpH.BadRequestResponse(w, r, err)
 		return
 	}
 
 	numbers, err := fs.fibonacciUC.GetSlice(from, to)
 	if err != nil {
 		if errors.Is(err, models.ErrInvalidArguments) {
-			fs.badRequestResponse(w, r, err)
+			fs.httpH.BadRequestResponse(w, r, err)
 			return
 		}
-		fs.serverErrorResponse(w, r, err)
+		fs.httpH.ServerErrorResponse(w, r, err)
 		return
 	}
 
@@ -47,8 +49,8 @@ func (fs *FibonacciService) GetHandler(w http.ResponseWriter, r *http.Request) {
 		Numbers []int64 `json:"numbers"`
 	}{numbers}
 
-	if err := fs.writeJSON(w, http.StatusOK, output); err != nil {
-		fs.serverErrorResponse(w, r, err)
+	if err := fs.httpH.WriteJSON(w, http.StatusOK, output); err != nil {
+		fs.httpH.ServerErrorResponse(w, r, err)
 		return
 	}
 }

@@ -30,7 +30,7 @@ func (s *Server) Run() {
 	go s.GrpcService.Serve(grpcL)
 	go s.HttpService.Serve(httpL)
 
-	s.Log.Infof("Starting server")
+	s.Log.Infof("Starting server on port %s", s.Cfg.ServerCfg.Port)
 	if err := m.Serve(); err != nil {
 		s.Log.Errorw("serving error", "error", err)
 		return
