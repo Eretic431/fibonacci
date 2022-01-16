@@ -11,8 +11,10 @@ type FibonacciRepository struct {
 	Pool *redis.Pool
 }
 
-func NewFibonacciRepository(pool *redis.Pool) *FibonacciRepository {
-	return &FibonacciRepository{Pool: pool}
+func NewFibonacciRepository(pool *redis.Pool) (*FibonacciRepository, error) {
+	fr := &FibonacciRepository{Pool: pool}
+	ctx := context.Background()
+	return fr, fr.initialSetup(ctx)
 }
 
 func (fr *FibonacciRepository) Get(ctx context.Context, key int) (int64, error) {
@@ -66,4 +68,37 @@ func (fr *FibonacciRepository) GetLastTwoNumbers(ctx context.Context) ([]int64, 
 	}
 
 	return output, nil
+}
+
+func (fr *FibonacciRepository) GetInterval(ctx context.Context, from, to int) ([]int64, error) {
+	conn, err := fr.Pool.GetContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+
+	reply, err := redis.Int64s(conn.Do("ZRANGE", "fibonacciNumbers", from-1, to-1))
+	if err != nil {
+		return nil, err
+	}
+
+	return reply, nil
+}
+
+func (fr *FibonacciRepository) initialSetup(ctx context.Context) error {
+	conn, err := fr.Pool.GetContext(ctx)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	err = conn.Send("ZADD", "fibonacciNumbers", "NX", 1, 0)
+	if err != nil {
+		return err
+	}
+
+	err = conn.Send("ZADD", "fibonacciNumbers", "NX", 2, "01")
+
+	return err
 }

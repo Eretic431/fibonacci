@@ -13,7 +13,7 @@ type ServerConfig struct {
 }
 
 type RedisConfig struct {
-	Url string `env:"REDIS_URL" envDefault:"redis:6379"`
+	Url string `env:"REDIS_URL" envDefault:"localhost:6379"`
 }
 
 func GetConfig() (*Config, error) {
