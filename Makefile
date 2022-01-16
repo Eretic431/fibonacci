@@ -3,6 +3,9 @@
 run:
 	go run ./cmd/fibonacci_service/
 
+build-client:
+	go build ./cmd/grpc_client
+
 # ____________________________________________________________________________
 # Code generation
 proto:
