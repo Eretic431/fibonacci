@@ -3,8 +3,8 @@ package grpc
 import (
 	"context"
 	"errors"
+	"github.com/Eretic431/fibonacci/internal/fibonacci"
 	fibonacciService "github.com/Eretic431/fibonacci/internal/fibonacci/proto"
-	"github.com/Eretic431/fibonacci/internal/fibonacci/usecase"
 	"github.com/Eretic431/fibonacci/internal/models"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -12,11 +12,11 @@ import (
 )
 
 type FibonacciService struct {
-	fibonacciUC *usecase.FibonacciUseCase
+	fibonacciUC fibonacci.FibonacciUseCase
 	log         *zap.SugaredLogger
 }
 
-func NewGrpcFibonacciService(fuc *usecase.FibonacciUseCase, log *zap.SugaredLogger) *FibonacciService {
+func NewGrpcFibonacciService(fuc fibonacci.FibonacciUseCase, log *zap.SugaredLogger) *FibonacciService {
 	return &FibonacciService{fibonacciUC: fuc, log: log}
 }
 
