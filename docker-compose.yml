@@ -3,7 +3,7 @@ version: '3'
 services:
   redis:
     image: redis
-    command: [ "redis-server", "--append-only", "yes" ]
+    command: [ "redis-server", "--appendonly", "yes" ]
     ports:
     - 6379:6379
     restart: unless-stopped
