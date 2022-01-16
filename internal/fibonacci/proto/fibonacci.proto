@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package fibonacciService;
+option go_package = ".;fibonacciService";
+
+message GetRequest {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message GetResponse {
+  repeated int64 numbers = 1;
+}
+
+service fibonacciService {
+  rpc Get(GetRequest) returns (GetResponse);
+}

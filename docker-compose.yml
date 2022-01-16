@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    command: [ "redis-server", "--appendonly", "yes" ]
+    ports:
+    - 6379:6379
+    restart: unless-stopped
+
+  app:
+    container_name: fibonacci
+    image: ghcr.io/eretic431/fibonacci
+    restart: unless-stopped
+    environment:
+      - PRODUCTION=true
+      - PORT=:8080
+      - REDIS_URL=redis:6379
+    ports:
+      - 8080:8080
+    depends_on:
+      - redis
