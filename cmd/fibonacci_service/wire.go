@@ -5,6 +5,7 @@ package main
 
 import (
 	"github.com/Eretic431/fibonacci/config"
+	"github.com/Eretic431/fibonacci/internal/fibonacci"
 	grpcS "github.com/Eretic431/fibonacci/internal/fibonacci/delivery/grpc"
 	httpS "github.com/Eretic431/fibonacci/internal/fibonacci/delivery/http"
 	"github.com/Eretic431/fibonacci/internal/fibonacci/repository/redis"
@@ -22,10 +23,12 @@ func initServer() (*server.Server, func(), error) {
 		logger.NewLogger,
 		pRedis.NewRedisPool,
 		redis.NewFibonacciRepository,
+		wire.Bind(new(fibonacci.FibonacciRepository), new(*redis.FibonacciRepository)),
 		usecase.NewFibonacciUseCase,
+		wire.Bind(new(fibonacci.FibonacciUseCase), new(*usecase.FibonacciUseCase)),
 		grpcS.NewGrpcFibonacciService,
 		utils.NewHttpHelper,
-		httpS.NewGrpcFibonacciService,
+		httpS.NewHttpFibonacciService,
 		wire.Struct(new(server.Server), "*"),
 	)
 

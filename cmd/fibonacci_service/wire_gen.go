@@ -38,7 +38,7 @@ func initServer() (*server.Server, func(), error) {
 	fibonacciUseCase := usecase.NewFibonacciUseCase(fibonacciRepository)
 	fibonacciService := grpc.NewGrpcFibonacciService(fibonacciUseCase, sugaredLogger)
 	httpHelper := utils.NewHttpHelper(sugaredLogger)
-	httpFibonacciService := http.NewGrpcFibonacciService(fibonacciUseCase, sugaredLogger, httpHelper)
+	httpFibonacciService := http.NewHttpFibonacciService(fibonacciUseCase, sugaredLogger, httpHelper)
 	serverServer := &server.Server{
 		Log:         sugaredLogger,
 		Cfg:         configConfig,

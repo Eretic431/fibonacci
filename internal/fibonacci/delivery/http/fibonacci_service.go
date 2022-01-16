@@ -2,7 +2,7 @@ package http
 
 import (
 	"errors"
-	"github.com/Eretic431/fibonacci/internal/fibonacci/usecase"
+	"github.com/Eretic431/fibonacci/internal/fibonacci"
 	"github.com/Eretic431/fibonacci/internal/models"
 	"github.com/Eretic431/fibonacci/pkg/utils"
 	"github.com/go-chi/chi/v5"
@@ -13,12 +13,12 @@ import (
 )
 
 type FibonacciService struct {
-	fibonacciUC *usecase.FibonacciUseCase
+	fibonacciUC fibonacci.FibonacciUseCase
 	log         *zap.SugaredLogger
 	httpH       *utils.HttpHelper
 }
 
-func NewGrpcFibonacciService(fuc *usecase.FibonacciUseCase, log *zap.SugaredLogger, httpH *utils.HttpHelper) *FibonacciService {
+func NewHttpFibonacciService(fuc fibonacci.FibonacciUseCase, log *zap.SugaredLogger, httpH *utils.HttpHelper) *FibonacciService {
 	return &FibonacciService{fibonacciUC: fuc, log: log, httpH: httpH}
 }
 

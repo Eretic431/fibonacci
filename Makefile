@@ -6,6 +6,9 @@ run:
 build-client:
 	go build ./cmd/grpc_client
 
+test:
+	go test ./internal/fibonacci/delivery/grpc ./internal/fibonacci/delivery/http ./internal/fibonacci/usecase
+
 # ____________________________________________________________________________
 # Code generation
 proto:
