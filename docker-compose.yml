@@ -1,6 +1,12 @@
 version: '3'
 
 services:
+  redis:
+    image: redis
+    command: [ "redis-server", "--append-only", "yes" ]
+    ports:
+    - 6379:6379
+    restart: unless-stopped
 
   app:
     container_name: fibonacci
@@ -9,5 +15,8 @@ services:
     environment:
       - PRODUCTION=true
       - PORT=:8080
+      - REDIS_URL=redis:6379
     ports:
       - 8080:8080
+    depends_on:
+      - redis

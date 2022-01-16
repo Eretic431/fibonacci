@@ -21,7 +21,7 @@ func NewGrpcFibonacciService(fuc *usecase.FibonacciUseCase, log *zap.SugaredLogg
 }
 
 func (fs *FibonacciService) Get(ctx context.Context, r *fibonacciService.GetRequest) (*fibonacciService.GetResponse, error) {
-	numbers, err := fs.fibonacciUC.GetSlice(int(r.GetX()), int(r.GetY()))
+	numbers, err := fs.fibonacciUC.GetSlice(ctx, int(r.GetX()), int(r.GetY()))
 	if err != nil {
 		if errors.Is(err, models.ErrInvalidArguments) {
 			fs.log.Debugw("client error", "error", err)

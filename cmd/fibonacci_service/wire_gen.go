@@ -9,9 +9,11 @@ import (
 	"github.com/Eretic431/fibonacci/config"
 	"github.com/Eretic431/fibonacci/internal/fibonacci/delivery/grpc"
 	"github.com/Eretic431/fibonacci/internal/fibonacci/delivery/http"
+	redis2 "github.com/Eretic431/fibonacci/internal/fibonacci/repository/redis"
 	"github.com/Eretic431/fibonacci/internal/fibonacci/usecase"
 	"github.com/Eretic431/fibonacci/internal/server"
 	"github.com/Eretic431/fibonacci/pkg/logger"
+	"github.com/Eretic431/fibonacci/pkg/redis"
 	"github.com/Eretic431/fibonacci/pkg/utils"
 )
 
@@ -26,7 +28,14 @@ func initServer() (*server.Server, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	fibonacciUseCase := usecase.NewFibonacciUseCase()
+	pool, cleanup2 := redis.NewRedisPool(configConfig, sugaredLogger)
+	fibonacciRepository, err := redis2.NewFibonacciRepository(pool)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	fibonacciUseCase := usecase.NewFibonacciUseCase(fibonacciRepository)
 	fibonacciService := grpc.NewGrpcFibonacciService(fibonacciUseCase, sugaredLogger)
 	httpHelper := utils.NewHttpHelper(sugaredLogger)
 	httpFibonacciService := http.NewGrpcFibonacciService(fibonacciUseCase, sugaredLogger, httpHelper)
@@ -37,6 +46,7 @@ func initServer() (*server.Server, func(), error) {
 		HttpService: httpFibonacciService,
 	}
 	return serverServer, func() {
+		cleanup2()
 		cleanup()
 	}, nil
 }

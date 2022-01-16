@@ -35,7 +35,7 @@ func (fs *FibonacciService) GetHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	numbers, err := fs.fibonacciUC.GetSlice(from, to)
+	numbers, err := fs.fibonacciUC.GetSlice(r.Context(), from, to)
 	if err != nil {
 		if errors.Is(err, models.ErrInvalidArguments) {
 			fs.httpH.BadRequestResponse(w, r, err)

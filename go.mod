@@ -6,6 +6,7 @@ require (
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/cockroachdb/cmux v0.0.0-20170110192607-30d10be49292
 	github.com/go-chi/chi/v5 v5.0.7
+	github.com/gomodule/redigo v1.8.8
 	github.com/google/wire v0.5.0
 	github.com/xlab/closer v0.0.0-20190328110542-03326addb7c2
 	go.uber.org/zap v1.20.0
