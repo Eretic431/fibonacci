@@ -12,7 +12,15 @@ GET /fibonacci?x=1&y=2
 `x` and `y` are non negative integers greater than 1. `x` is less than or equal `y`
 
 #### gRPC
-Proto file can be found [here](https://github.com/Eretic431/fibonacci/blob/master/internal/fibonacci/proto/fibonacci.proto)
+Proto file can be found [here](https://github.com/Eretic431/fibonacci/blob/master/internal/fibonacci/proto/fibonacci.proto).
+You can also compile gRPC Client to test out gRPC work:
+```sh
+make build-client
+```
+Then run:
+```sh
+./grpc_client -x=1 -y=5
+```
 
 ## Deployment
 To start the service simply run:
