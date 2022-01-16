@@ -9,13 +9,14 @@ import (
 	httpS "github.com/Eretic431/fibonacci/internal/fibonacci/delivery/http"
 	"github.com/Eretic431/fibonacci/internal/fibonacci/usecase"
 	"github.com/Eretic431/fibonacci/internal/server"
+	"github.com/Eretic431/fibonacci/pkg/logger"
 	"github.com/google/wire"
 )
 
 func initServer() (*server.Server, func(), error) {
 	wire.Build(
 		config.GetConfig,
-		newLogger,
+		logger.NewLogger,
 		usecase.NewFibonacciUseCase,
 		grpcS.NewGrpcFibonacciService,
 		httpS.NewGrpcFibonacciService,
