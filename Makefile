@@ -21,3 +21,11 @@ docker-run:
 
 docker-push: docker-build
 	docker push ghcr.io/eretic431/fibonacci:latest
+
+# ____________________________________________________________________________
+# Deployments
+up:
+	docker-compose up -d
+
+down:
+	docker-compose down
